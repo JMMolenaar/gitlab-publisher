@@ -5,6 +5,8 @@ var router = express.Router();
 router.post('/', function(req, res, next) {
     var app = req.app;
     var event = req.body;
+    var queue = app.locals.queue;
+
     console.log(event.event_name + ' event received.');
     /** { event_name: 'project_create',
       path: 'ruby',
@@ -13,7 +15,7 @@ router.post('/', function(req, res, next) {
       owner_email: 'example@gitlabhq.com' }
       owner_name: 'Someone'} **/
     if (event.event_name == 'project_created') {
-        app.locals.database.insert({
+        var project = {
             project_id: event.project_id,
             name: event.name,
             path: event.path_with_namespace,
@@ -21,6 +23,9 @@ router.post('/', function(req, res, next) {
             owner_email: event.owner_email,
             created_at: event.created_at
 
+        };
+        var updateRequest = queue.create("project", project).save(function(err){
+           if (!err) console.log( updateRequest.id);
         });
     }
     res.render('index', { title: 'OK' });
@@ -30,6 +35,8 @@ router.post('/update/:project_id', function(req,res,next){
 
     var app = req.app;
     var event = req.body;
+    var queue = app.locals.queue;
+
     event.project_id = req.params.project_id;
     // post an update request for this project_id
     var updateRequest= queue.create('push', event).save( function(err){

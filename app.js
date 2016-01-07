@@ -10,7 +10,7 @@ var users = require('./routes/users');
 var projects = require('./routes/projects');
 var secrets = require('./secrets');
 var queue = require('queue');
-var database = require('./lib/db')
+var database = require('./lib/db');
 
 var kue = require('kue');
 
@@ -66,12 +66,20 @@ app.use(function(err, req, res, next) {
 database.create();
 app.locals.database = database;
 
-app.locals.queue =  kue.createQueue();
+var myqueue=  kue.createQueue();
 
 
-app.locals.queue.process("push", function(job, done){
+myqueue.process("push", function(job, done){
 
-    console.log("Received job");
+    console.log("Received push job");
+    console.log(job);
+    done();
+
+
+});
+myqueue.process("project", function(job,done){
+
+    console.log("Received project job");
     console.log(job);
     done();
 
@@ -83,6 +91,8 @@ process.on('exit', function() {
   console.log('About to exit.');
     database.close();
 });
+
+app.locals.queue = myqueue;
 
 
 module.exports = app;
