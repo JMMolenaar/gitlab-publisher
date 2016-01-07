@@ -3,7 +3,9 @@ var router = express.Router();
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
-  res.render('index', { title: 'Express' });
+  var app = req.app;
+  res.send(app.locals);
+  //res.render('index', { title: 'GitLab Publisher' });
 });
 
 module.exports = router;

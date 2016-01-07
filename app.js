@@ -9,7 +9,7 @@ var routes = require('./routes/index');
 var users = require('./routes/users');
 var projects = require('./routes/projects');
 var secrets = require('./secrets');
-
+var queue = require('queue');
 var app = express();
 
 // view engine setup
@@ -58,6 +58,10 @@ app.use(function(err, req, res, next) {
     error: {}
   });
 });
+
+
+app.locals.queue = [];
+
 
 
 module.exports = app;
