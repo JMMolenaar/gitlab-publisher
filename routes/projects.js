@@ -14,7 +14,7 @@ router.post('/', function(req, res, next) {
       project_id: 1,
       owner_email: 'example@gitlabhq.com' }
       owner_name: 'Someone'} **/
-    if (event.event_name == 'project_created') {
+    if (event.event_name == 'project_create') {
         var project = {
             project_id: event.project_id,
             name: event.name,
@@ -22,7 +22,6 @@ router.post('/', function(req, res, next) {
             owner_name: event.owner_name,
             owner_email: event.owner_email,
             created_at: event.created_at
-
         };
         var updateRequest = queue.create("project", project).save(function(err){
            if (!err) console.log( updateRequest.id);
