@@ -32,6 +32,9 @@ router.post('/update/:project_id', function(req,res,next){
     var event = req.body;
     event.project_id = req.params.project_id;
     // post an update request for this project_id
+    var updateRequest= queue.create('push', event).save( function(err){
+        if( !err ) console.log( updateRequest.id );
+    });
 
     //app.locals.queue.push(event);
     res.render('index', { title: 'OK' });

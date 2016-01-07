@@ -11,6 +11,9 @@ var projects = require('./routes/projects');
 var secrets = require('./secrets');
 var queue = require('queue');
 var database = require('./lib/db')
+
+var kue = require('kue');
+
 var app = express();
 
 // view engine setup
@@ -63,7 +66,17 @@ app.use(function(err, req, res, next) {
 database.create();
 app.locals.database = database;
 
-app.locals.queue = [];
+app.locals.queue =  kue.createQueue();
+
+
+app.locals.queue.process("push", function(job, done){
+
+    console.log("Received job");
+    console.log(job);
+    done();
+
+
+});
 
 
 process.on('exit', function() {
