@@ -12,7 +12,17 @@ router.post('/', function(req, res, next) {
       project_id: 1,
       owner_email: 'example@gitlabhq.com' }
       owner_name: 'Someone'} **/
-    app.locals.queue.push(event);
+    if (event.event_name == 'project_created') {
+        app.locals.database.insert({
+            project_id: event.project_id,
+            name: event.name,
+            path: event.path_with_namespace,
+            owner_name: event.owner_name,
+            owner_email: event.owner_email,
+            created_at: event.created_at
+
+        });
+    }
     res.render('index', { title: 'OK' });
 });
 
@@ -21,7 +31,9 @@ router.post('/update/:project_id', function(req,res,next){
     var app = req.app;
     var event = req.body;
     event.project_id = req.params.project_id;
-    app.locals.queue.push(event);
+    // post an update request for this project_id
+
+    //app.locals.queue.push(event);
     res.render('index', { title: 'OK' });
 });
 

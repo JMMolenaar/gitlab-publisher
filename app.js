@@ -10,6 +10,7 @@ var users = require('./routes/users');
 var projects = require('./routes/projects');
 var secrets = require('./secrets');
 var queue = require('queue');
+var database = require('./lib/db')
 var app = express();
 
 // view engine setup
@@ -59,9 +60,16 @@ app.use(function(err, req, res, next) {
   });
 });
 
+database.create();
+app.locals.database = database;
 
 app.locals.queue = [];
 
+
+process.on('exit', function() {
+  console.log('About to exit.');
+    database.close();
+});
 
 
 module.exports = app;
