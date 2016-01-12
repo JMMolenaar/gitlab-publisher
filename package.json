@@ -14,10 +14,14 @@
     "gitlab": "^1.5.0",
     "kue": "^0.10.4",
     "morgan": "~1.6.1",
+    "node-regexp": "^0.1.1",
     "queue": "^3.1.0",
     "redis": "^2.4.2",
     "serve-favicon": "~2.3.0",
     "simple-git": "^1.21.0",
+    "sqlite3": "^3.1.1"
+  },
+  "devDependencies": {
     "sqlite3": "^3.1.1"
   }
 }
