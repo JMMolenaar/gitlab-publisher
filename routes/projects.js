@@ -30,12 +30,32 @@ router.post('/', function(req, res, next) {
     res.render('index', { title: 'OK' });
 });
 
+
+router.get('/show/:project_id', function(req,res,next){
+
+    var app = req.app;
+ 
+    var db = app.locals.database;
+    var project_id = req.params.project_id;
+
+    db.get(project_id, function(err,row){
+        console.log(project_id);
+	console.log(err);
+        console.log(row);
+        res.send(JSON.stringify(row));
+    });
+
+
+});
+
+
 router.post('/update/:project_id', function(req,res,next){
 
     var app = req.app;
     var event = req.body;
     var queue = app.locals.queue;
-
+    console.log('update');
+    console.log(event);
     event.project_id = req.params.project_id;
     // post an update request for this project_id
     var updateRequest= queue.create('push', event).save( function(err){
